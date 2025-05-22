@@ -6,23 +6,34 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 11:56:53 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/22 14:37:50 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/22 18:36:37 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-#include "mlx.h"
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	void	*mlx;
 	void	*win;
 	char	**map;
 
-	map = load_map("maps/map_test1.ber");
+	if (argc < 2)
+		no_map();
+	if (argc > 2)
+		too_many_args();
+	if (!name_check(argv[1]))
+		wrong_format();
+	map = load_map(argv[1]);
 	if (map == NULL)
 	{
 		ft_putstr_fd("Map load error\n", 2);
+		return (1);
+	}
+	if (!map_valid(map))
+	{
+		ft_putstr_fd("Invalid map\n", 2);
+		free_map(map);
 		return (1);
 	}
 	print_map(map);
@@ -44,15 +55,3 @@ int	main(void)
 	free_map(map);
 	return (0);
 }
-
-/* int	main(int argc, char **argv)
-{
-	if (argc < 2)
-		no_map();
-	if (argc > 2)
-		too_many_args();
-	if (!name_check(argv[1]))
-		wrong_format();
-	
-	return (0);
-} */

@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map.c                                              :+:      :+:    :+:   */
+/*   map_utils1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:30:21 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/22 14:36:08 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/22 18:47:50 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-/* int	name_check(char *s)
+int	name_check(char *s)
 {
 	int	len;
 	
 	len = ft_strlen(s) - 1;
-	while (len > 0 && s[len] != '.')
+	while (len >= 4 && s[len] != '.')
 		len --;
-	if (len != 0 && ft_strncmp(s[len], ".ber", 4) == 0)
+	if (len != 0 && ft_strncmp(&s[len], ".ber", 4) == 0)
 		return (1);
 	return (0);
 }
- */
 
 int	len_map(char *map_file)
 {
@@ -98,15 +97,43 @@ char	**load_map(char *map_file)
 	return (map);
 }
 
-void	print_map(char **map) //early tests
+int	map_valid(char **map)
 {
-	int	i;
+	size_t	width;
+	int		y;
+	int		x;
+	int		p;
+	int		e;
+	int		c;
 
-	i = 0;
-	while (map[i] != NULL)
+	y = 0;
+	width = ft_strlen(map[0]);
+	p = 0;
+	e = 0;
+	c = 0;
+	while (map[y])
 	{
-		ft_printf("%s", map[i]);
-		i++;
+		if (ft_strlen(map[y]) != width)
+			return (0);
+		x = 0;
+		while (map[y][x])
+		{
+			if (ft_strchr("01PCE\n", map[y][x]))
+				return(0);
+			if (((y == 0 || !map[y + 1]) || x == 0 || x == (int)width - 1)\
+			&& map[y][x] != '1')
+				return (0);
+			if (map[y][x] == 'P')
+				p++;
+			if (map[y][x] == 'E')
+				e++;
+			if (map[y][x] == 'C')
+				c++;
+			x ++;
+		}
+		y++;
 	}
-	return ;
+	if (p != 1 || e != 1 || c < 1)
+		return (0);
+	return (1);
 }
