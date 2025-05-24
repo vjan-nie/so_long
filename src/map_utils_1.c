@@ -1,28 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_utils1.c                                       :+:      :+:    :+:   */
+/*   map_utils_1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:30:21 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/22 18:47:50 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/24 13:09:10 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-int	name_check(char *s)
-{
-	int	len;
-	
-	len = ft_strlen(s) - 1;
-	while (len >= 4 && s[len] != '.')
-		len --;
-	if (len != 0 && ft_strncmp(&s[len], ".ber", 4) == 0)
-		return (1);
-	return (0);
-}
 
 int	len_map(char *map_file)
 {
@@ -47,6 +35,8 @@ void free_map(char **map)
 {
 	int	i;
 
+	if (!map)
+		return;
 	i = 0;
 	while (map[i] != NULL)
 	{
@@ -61,6 +51,7 @@ char	**load_map(char *map_file)
 {
 	int		fd;
 	char	*line;
+	char	*clean_line;
 	char	**map;
 	int		rows;
 	int		row;
@@ -81,14 +72,15 @@ char	**load_map(char *map_file)
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
-		map[row] = ft_strdup(line);
+		clean_line = ft_strtrim(line, "\n");
 		free(line);
-		if (map[row] == NULL)
+		if (!clean_line)
 		{
 			free_map(map);
 			close(fd);
 			return (NULL);
 		}
+		map[row] = clean_line;
 		line = get_next_line(fd);
 		row++;
 	}
@@ -118,7 +110,7 @@ int	map_valid(char **map)
 		x = 0;
 		while (map[y][x])
 		{
-			if (ft_strchr("01PCE\n", map[y][x]))
+			if (!ft_strchr("01PCE\n", map[y][x]))
 				return(0);
 			if (((y == 0 || !map[y + 1]) || x == 0 || x == (int)width - 1)\
 			&& map[y][x] != '1')

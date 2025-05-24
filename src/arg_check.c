@@ -1,34 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   arg_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/20 11:56:53 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/24 13:09:12 by vjan-nie         ###   ########.fr       */
+/*   Created: 2025/05/24 11:43:04 by vjan-nie          #+#    #+#             */
+/*   Updated: 2025/05/24 12:39:20 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	main(int argc, char **argv)
+void	arg_check(int argc, char **argv)
 {
-	void	*mlx;
-	char	**map;
+	if (argc < 2)
+		no_map();
+	if (argc > 2)
+		too_many_args();
+	if (!name_check(argv[1]))
+		wrong_format();
+	return ;
+}
 
-	arg_check(argc, argv);
-	map = load_map(argv[1]);
-	if (map == NULL)
-		map_load_error();
-	if (!map_valid(map))
-		invalid_map();
-	mlx = mlx_init();
-	if (!mlx)
-		mlx_error(mlx, map);
-	so_long(mlx, map);
-	// free_map(map);
-	// mlx_destroy_window(mlx, win);
-	// mlx_destroy_display(mlx); llamar manualmente x desde un hook
+int	name_check(char *s)
+{
+	int	len;
+	
+	len = ft_strlen(s);
+	if (len < 5) // al menos 1 char + ".ber"
+		return (0);
+	if (ft_strncmp(s + len - 4, ".ber", 4) != 0)
+		return (0);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 15:29:05 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/22 19:42:31 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/24 13:16:01 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@
 # include <fcntl.h>
 # include <unistd.h>
 # include <stdio.h>
-# include <string.h>
-# include <math.h>
+//# include <string.h>
+//# include <math.h>
 # include <mlx.h>
 # include "libft.h"
+
+# define TILE_SIZE 64
 
 typedef struct s_game
 {
@@ -41,15 +43,25 @@ typedef struct s_game
 	void	*img_c;
 }			t_game;
 
+void	so_long(void *mlx, char **map);
+void	arg_check(int argc, char **argv);
 void	no_map(void);
 void	too_many_args(void);
 void	wrong_format(void);
+void	map_load_error(void);
+void	invalid_map(void);
+void	ft_mlx_error(void *mlx, char **map);
+void	ft_window_error(void *mlx, void *win, char **map);
 void	free_map(char **map);
+t_game	game_init(void *mlx, void *win, char **map);
 char	**load_map(char *map_file);
 int		name_check(char *s);
 int		len_map(char *map_file);
 int		map_valid(char **map);
+int	get_map_width(char **map);
+int	get_map_height(char **map);
 int	collectables_reachable(t_game game);
+int		get_player_pos(char **map, int is_y);
 int	exit_reachable(t_game game);
 char	**map_dup(t_game game);
 int	flood_fill(char **temp, char c, int count, int y, int x, int height, int width);

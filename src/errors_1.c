@@ -1,34 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   errors_1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/20 11:56:53 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/24 13:09:12 by vjan-nie         ###   ########.fr       */
+/*   Created: 2025/05/20 14:03:52 by vjan-nie          #+#    #+#             */
+/*   Updated: 2025/05/24 11:52:53 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	main(int argc, char **argv)
+void	no_map(void)
 {
-	void	*mlx;
-	char	**map;
+	ft_printf("Can't start without a map!\n");
+	exit(1);
+}
 
-	arg_check(argc, argv);
-	map = load_map(argv[1]);
-	if (map == NULL)
-		map_load_error();
-	if (!map_valid(map))
-		invalid_map();
-	mlx = mlx_init();
-	if (!mlx)
-		mlx_error(mlx, map);
-	so_long(mlx, map);
-	// free_map(map);
-	// mlx_destroy_window(mlx, win);
-	// mlx_destroy_display(mlx); llamar manualmente x desde un hook
-	return (0);
+void	too_many_args(void)
+{
+	ft_printf("Too many args. Choose one map\n");
+	exit(1);
+}
+
+void	wrong_format(void)
+{
+	ft_printf("Invalid format: .ber map needed\n");
+	exit(1);
+}
+
+void	map_load_error(void)
+{
+	ft_putstr_fd("Map load error\n", 2);
+	exit(1);
+}
+
+void	invalid_map(void)
+{
+	ft_putstr_fd("Invalid map\n", 2);
+	exit(1);
 }

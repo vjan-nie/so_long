@@ -6,7 +6,7 @@
 #    By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/17 12:24:16 by vjan-nie          #+#    #+#              #
-#    Updated: 2025/05/22 18:40:17 by vjan-nie         ###   ########.fr        #
+#    Updated: 2025/05/24 12:20:56 by vjan-nie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,9 +38,12 @@ MINILIBX	=	$(MINILIBX_DIR)/libmlx_linux.a
 
 SRC		=	$(SRC_DIR)/main.c\
 			$(SRC_DIR)/so_long.c\
-			$(SRC_DIR)/errors.c\
-			$(SRC_DIR)/map_utils1.c\
-			$(SRC_DIR)/map_utils2.c
+			$(SRC_DIR)/so_long_utils.c\
+			$(SRC_DIR)/arg_check.c\
+			$(SRC_DIR)/errors_1.c\
+			$(SRC_DIR)/errors_2.c\
+			$(SRC_DIR)/map_utils_1.c\
+			$(SRC_DIR)/map_utils_2.c
 
 # Objects
 

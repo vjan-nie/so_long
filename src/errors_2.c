@@ -1,31 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   errors_2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/20 14:03:52 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/20 14:33:24 by vjan-nie         ###   ########.fr       */
+/*   Created: 2025/05/24 11:36:00 by vjan-nie          #+#    #+#             */
+/*   Updated: 2025/05/24 13:09:13 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	no_map(void)
+void	ft_mlx_error(void *mlx, char **map)
 {
-	ft_printf("Can't start without a map!\n");
+	ft_putstr_fd("MLX initialization error\n", 2);
+	free_map(map);
 	exit(1);
 }
-
-void	too_many_args(void)
+	
+void	ft_window_error(void *mlx, void *win, char **map)
 {
-	ft_printf("Too many args. Choose one map\n");
+	ft_putstr_fd("Window creation error\n", 2);
+	free_map(map);
+	mlx_destroy_display(mlx);
 	exit(1);
 }
-
-void	wrong_format(void)
-{
-	ft_printf("Invalid map format\n");
-	exit(1);
-}
+	
