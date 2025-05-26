@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:14:19 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/24 13:18:09 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/26 13:18:08 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,10 +102,10 @@ t_game	game_init(void *mlx, void *win, char **map)
 	}
 	// cargar sprites:
 	int	w, h;
-	game.img_wall = mlx_xpm_file_to_image(mlx, "textures/wall.xpm", &w, &h);
-	game.img_background = mlx_xpm_file_to_image(mlx, "textures/ground.xpm", &w, &h);
-	game.img_p = mlx_xpm_file_to_image(mlx, "textures/player.xpm", &w, &h);
-	game.img_c = mlx_xpm_file_to_image(mlx, "textures/collectible.xpm", &w, &h);
-	game.img_e = mlx_xpm_file_to_image(mlx, "textures/exit.xpm", &w, &h);
+	game.img_wall = mlx_xpm_file_to_image(mlx, "images/wall.xpm", &w, &h);
+	game.img_background = mlx_xpm_file_to_image(mlx, "images/background.xpm", &w, &h);
+	game.img_p = mlx_xpm_file_to_image(mlx, "images/P_down1.xpm", &w, &h);
+	game.img_c = mlx_xpm_file_to_image(mlx, "images/C1.xpm", &w, &h);
+	game.img_e = mlx_xpm_file_to_image(mlx, "images/E1.xpm", &w, &h);
 	return (game);
 }

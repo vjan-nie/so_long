@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 11:43:04 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/24 12:39:20 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/26 13:27:53 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 void	arg_check(int argc, char **argv)
 {
 	if (argc < 2)
-		no_map();
+		arg_error("Can't start without a map!\n");
 	if (argc > 2)
-		too_many_args();
+		arg_error("Too many args. Choose one map\n");
 	if (!name_check(argv[1]))
-		wrong_format();
+		arg_error("Invalid format: .ber map needed\n");;
 	return ;
 }
 
@@ -28,9 +28,9 @@ int	name_check(char *s)
 	int	len;
 	
 	len = ft_strlen(s);
-	if (len < 5) // al menos 1 char + ".ber"
+	if (len < 5)
 		return (0);
 	if (ft_strncmp(s + len - 4, ".ber", 4) != 0)
 		return (0);
-	return (0);
+	return (1);
 }

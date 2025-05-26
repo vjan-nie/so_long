@@ -1,29 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors_2.c                                         :+:      :+:    :+:   */
+/*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/24 11:36:00 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/24 13:09:13 by vjan-nie         ###   ########.fr       */
+/*   Created: 2025/05/20 14:03:52 by vjan-nie          #+#    #+#             */
+/*   Updated: 2025/05/26 13:21:11 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	ft_mlx_error(void *mlx, char **map)
+void	arg_error(char *error)
+{
+	ft_printf("%s", error);
+	exit(1);
+}
+
+void	map_error(char *error)
+{
+	ft_putstr_fd(error, 2);
+	exit(1);
+}
+
+void	ft_mlx_error(char **map)
 {
 	ft_putstr_fd("MLX initialization error\n", 2);
 	free_map(map);
 	exit(1);
 }
 	
-void	ft_window_error(void *mlx, void *win, char **map)
+void	ft_window_error(void *mlx, char **map)
 {
 	ft_putstr_fd("Window creation error\n", 2);
 	free_map(map);
 	mlx_destroy_display(mlx);
 	exit(1);
 }
-	

@@ -6,13 +6,13 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:36:17 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/24 13:19:38 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/26 13:24:56 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-// void	render_map(t_game *game)
+void	render_map(t_game *game)
 {
 	int	x, y;
 	void	*img;
@@ -61,7 +61,7 @@ void	so_long(void *mlx, char **map)
 	height = get_map_height(map) * TILE_SIZE;
 	win = mlx_new_window(mlx, width, height, "so_long");
 	if (!win)
-		window_error(mlx, win, map);
+		ft_window_error(mlx, map);
 	game = game_init(mlx, win, map);
 
 	

@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 15:29:05 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/24 13:16:01 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/26 13:21:35 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,12 @@ typedef struct s_game
 
 void	so_long(void *mlx, char **map);
 void	arg_check(int argc, char **argv);
-void	no_map(void);
-void	too_many_args(void);
-void	wrong_format(void);
-void	map_load_error(void);
-void	invalid_map(void);
-void	ft_mlx_error(void *mlx, char **map);
-void	ft_window_error(void *mlx, void *win, char **map);
+void	arg_error(char *error);
+void	map_error(char *error);
+void	ft_mlx_error(char **map);
+void	ft_window_error(void *mlx, char **map);
 void	free_map(char **map);
+void	render_map(t_game *game);
 t_game	game_init(void *mlx, void *win, char **map);
 char	**load_map(char *map_file);
 int		name_check(char *s);

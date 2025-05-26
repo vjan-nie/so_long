@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:40:42 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/24 13:09:08 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/26 13:22:15 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	flood_fill(char **temp, char c, int count, int y, int x, int height, int wid
 		return (count);
 	if (y < 0 || x < 0 || y >= height|| x >= width)
 		return (count);
-	if (temp[y][x] == 'F' || temp[y][x] != 0 && temp[y][x] != 'P' && temp[y][x] != c)
+	if ((temp[y][x] == 'F' || temp[y][x] != 0) && temp[y][x] != 'P' && temp[y][x] != c)
 		return (count);
 	if (temp[y][x] == c)
 		count --;
