@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 11:56:53 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/26 13:24:37 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/27 14:24:46 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,5 @@ int	main(int argc, char **argv)
 	if (!mlx)
 		ft_mlx_error(mlx);
 	so_long(mlx, map);
-	// free_map(map);
-	// mlx_destroy_window(mlx, win);
-	// mlx_destroy_display(mlx); llamar manualmente x desde un hook
 	return (0);
 }

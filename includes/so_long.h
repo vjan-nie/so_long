@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 15:29:05 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/26 13:21:35 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:24:15 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,47 @@
 
 typedef struct s_game
 {
-	void	*mlx;        // puntero al contexto de MLX
-	void	*win;        // puntero a la ventana
-	char	**map;       // mapa cargado
-	int		width;      // ancho del mapa (en tiles)
-	int		height;     // alto del mapa (en tiles)
-	int		p_x;   // posición del jugador (columna)
-	int		p_y;   // posición del jugador (fila)
-	int		c;   // total de coleccionables restantes
-	int		moves;      // cantidad de movimientos hechos
-	// sprites
+	void	*mlx;
+	void	*win;
+	char	**map;
+	int		width;
+	int		height;
+	int		p_x;
+	int		p_y;
+	int		c;
+	int		moves;
+
 	void	*img_wall;
 	void	*img_background;
+
 	void	*img_p;
-	void	*img_e;
 	void	*img_c;
+	void	*img_e;
+	void	*img_enemy;
+
+	void	*player_down[4];
+	void	*player_up[4];
+	void	*player_left[4];
+	void	*player_right[4];
+
+	void	*collectable[3];
+	void	*exit[2];
+
+	int		player_index;
+	int		collectable_index;
+	int		exit_index;
+
+	int		frame_counter;
+	int		collectable_counter;
+	int		exit_counter;
+
+	char	last_dir;
+
+	int		enemy_x;
+	int		enemy_y;
+	int		enemy_dx; // dirección en x (1 o -1)
+	int		enemy_dy; // dirección en y (1 o -1)
+	int		enemy_timer;
 }			t_game;
 
 void	so_long(void *mlx, char **map);
@@ -53,6 +79,7 @@ void	free_map(char **map);
 void	render_map(t_game *game);
 t_game	game_init(void *mlx, void *win, char **map);
 char	**load_map(char *map_file);
+int	animation_loop(t_game *game);
 int		name_check(char *s);
 int		len_map(char *map_file);
 int		map_valid(char **map);
@@ -62,6 +89,12 @@ int	collectables_reachable(t_game game);
 int		get_player_pos(char **map, int is_y);
 int	exit_reachable(t_game game);
 char	**map_dup(t_game game);
+int	handle_close(t_game *game);
+void	exit_game(t_game *game);
+int	handle_keypress(int keycode, t_game *game);
+int	animation_loop(t_game *game);
+void	move_enemy(t_game *game);
+void	move_player(t_game *game, int dx, int dy);
 int	flood_fill(char **temp, char c, int count, int y, int x, int height, int width);
 
 #endif
