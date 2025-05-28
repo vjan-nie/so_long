@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 15:29:05 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/27 17:24:15 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/28 14:06:28 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ typedef struct s_game
 void	so_long(void *mlx, char **map);
 void	arg_check(int argc, char **argv);
 void	arg_error(char *error);
-void	map_error(char *error);
+void	map_error(char **map, char *error);
 void	ft_mlx_error(char **map);
 void	ft_window_error(void *mlx, char **map);
 void	free_map(char **map);
@@ -87,6 +87,7 @@ int	get_map_width(char **map);
 int	get_map_height(char **map);
 int	collectables_reachable(t_game game);
 int		get_player_pos(char **map, int is_y);
+int		get_enemy_pos(char **map, int is_y);
 int	exit_reachable(t_game game);
 char	**map_dup(t_game game);
 int	handle_close(t_game *game);
@@ -95,6 +96,8 @@ int	handle_keypress(int keycode, t_game *game);
 int	animation_loop(t_game *game);
 void	move_enemy(t_game *game);
 void	move_player(t_game *game, int dx, int dy);
+void	*safe_load_image(void *mlx, const char *path, int *w, int *h);
+char	*image_path(const char *prefix, int index, const char *suffix);
 int	flood_fill(char **temp, char c, int count, int y, int x, int height, int width);
 
 #endif

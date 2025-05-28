@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:14:19 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/27 17:40:19 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/28 14:29:01 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,31 @@ int		get_player_pos(char **map, int is_y)
 	return (-1);
 }
 
+int		get_enemy_pos(char **map, int is_y)
+{
+	int	y;
+	int	x;
+
+	y = 0;
+	while (map[y])
+	{
+		x = 0;
+		while (map[y][x])
+		{
+			if (map[y][x] == 'X')
+			{
+				if (is_y == 1)
+					return (y);
+				else
+					return (x);
+			}
+			x++;
+		}
+		y++;
+	}
+	return (-1);
+}
+
 int	handle_close(t_game *game)
 {
 	exit_game(game);
@@ -75,40 +100,88 @@ int	handle_close(t_game *game)
 
 void	exit_game(t_game *game)
 {
-	// Libera imágenes del jugador
-	for (int i = 0; i < 4; i++)
+	if (game->mlx)
 	{
-		mlx_destroy_image(game->mlx, game->player_down[i]);
-		mlx_destroy_image(game->mlx, game->player_up[i]);
-		mlx_destroy_image(game->mlx, game->player_left[i]);
-		mlx_destroy_image(game->mlx, game->player_right[i]);
+		for (int i = 0; i < 4; i++)
+		{
+			if (game->player_down[i])
+				mlx_destroy_image(game->mlx, game->player_down[i]);
+			if (game->player_up[i])
+				mlx_destroy_image(game->mlx, game->player_up[i]);
+			if (game->player_left[i])
+				mlx_destroy_image(game->mlx, game->player_left[i]);
+			if (game->player_right[i])
+				mlx_destroy_image(game->mlx, game->player_right[i]);
+		}
+
+		for (int i = 0; i < 3; i++)
+		{
+			if (game->collectable[i])
+				mlx_destroy_image(game->mlx, game->collectable[i]);
+		}
+
+		for (int i = 0; i < 2; i++)
+		{
+			if (game->exit[i])
+				mlx_destroy_image(game->mlx, game->exit[i]);
+		}
+
+		if (game->img_wall)
+			mlx_destroy_image(game->mlx, game->img_wall);
+		if (game->img_background)
+			mlx_destroy_image(game->mlx, game->img_background);
+		if (game->img_enemy)
+    		mlx_destroy_image(game->mlx, game->img_enemy);
+
+		if (game->win)
+			mlx_destroy_window(game->mlx, game->win);
+
+		mlx_destroy_display(game->mlx);
+		free(game->mlx);
 	}
 
-	// Libera animaciones coleccionables y salida
-	for (int i = 0; i < 3; i++)
-		mlx_destroy_image(game->mlx, game->collectable[i]);
-	for (int i = 0; i < 2; i++)
-		mlx_destroy_image(game->mlx, game->exit[i]);
-
-	// Libera imágenes estáticas
-	mlx_destroy_image(game->mlx, game->img_wall);
-	mlx_destroy_image(game->mlx, game->img_background);
-
-	// Cierra ventana
-	mlx_destroy_window(game->mlx, game->win);
-
-	// Libera mapa
-	free_map(game->map); // asegúrate de tener esta función
+	if (game->map)
+		free_map(game->map);
 
 	exit(0);
+}
+
+void	*safe_load_image(void *mlx, const char *path, int *w, int *h)
+{
+	void *img = mlx_xpm_file_to_image(mlx, (char *)path, w, h);
+	if (!img)
+	{
+		ft_putstr_fd("Load image error\n", 2);
+		exit(1);
+	}
+	return (img);
+}
+
+char	*image_path(const char *prefix, int index, const char *suffix)
+{
+	char	*number;
+	char	*temp;
+	char	*result;
+
+	number = ft_itoa(index);
+	if (!number)
+		return (NULL);
+	temp = ft_strjoin(prefix, number);
+	free(number);
+	if (!temp)
+		return (NULL);
+	result = ft_strjoin(temp, suffix);
+	free(temp);
+	return (result);
 }
 
 t_game	game_init(void *mlx, void *win, char **map)
 {
 	t_game	game;
 	int		y, x, w, h;
-	char	path[64];
+	char	*path;
 
+	ft_bzero(&game, sizeof(t_game));
 	game.mlx = mlx;
 	game.win = win;
 	game.map = map;
@@ -125,8 +198,8 @@ t_game	game_init(void *mlx, void *win, char **map)
 	game.collectable_index = 0;
 	game.exit_index = 0;
 	game.last_dir = 'd';
-	game.enemy_x = 1;
-	game.enemy_y = 1;
+	game.enemy_x = get_enemy_pos(map, 0);
+	game.enemy_y = get_enemy_pos(map, 1);
 	game.enemy_dx = 1;
 	game.enemy_dy = 0;
 	game.enemy_timer = 0;
@@ -151,32 +224,39 @@ t_game	game_init(void *mlx, void *win, char **map)
 	// Cargar imágenes estáticas
 	game.img_wall = mlx_xpm_file_to_image(mlx, "images/wall2.xpm", &w, &h);
 	game.img_background = mlx_xpm_file_to_image(mlx, "images/background.xpm", &w, &h);
-	game.img_enemy = mlx_xpm_file_to_image(mlx, "images/enemy.xpm", &w, &h);
+	if (game.enemy_x != -1 && game.enemy_y != -1)
+		game.img_enemy = mlx_xpm_file_to_image(mlx, "images/enemy.xpm", &w, &h);
 	// Cargar animaciones jugador
 	for (int i = 0; i < 4; i++)
 	{
-		snprintf(path, sizeof(path), "images/P_down%d.xpm", i + 1);
-		game.player_down[i] = mlx_xpm_file_to_image(mlx, path, &w, &h);
-		snprintf(path, sizeof(path), "images/P_up%d.xpm", i + 1);
-		game.player_up[i] = mlx_xpm_file_to_image(mlx, path, &w, &h);
-		snprintf(path, sizeof(path), "images/P_left%d.xpm", i + 1);
-		game.player_left[i] = mlx_xpm_file_to_image(mlx, path, &w, &h);
-		snprintf(path, sizeof(path), "images/P_right%d.xpm", i + 1);
-		game.player_right[i] = mlx_xpm_file_to_image(mlx, path, &w, &h);
+		path = image_path("images/P_down", i + 1, ".xpm");
+		game.player_down[i] = safe_load_image(mlx, path, &w, &h);
+		free(path);
+		path = image_path("images/P_up", i + 1, ".xpm");
+		game.player_up[i] = safe_load_image(mlx, path, &w, &h);
+		free(path);
+		path = image_path("images/P_left", i + 1, ".xpm");
+		game.player_left[i] = safe_load_image(mlx, path, &w, &h);
+		free(path);
+		path = image_path("images/P_right", i + 1, ".xpm");
+		game.player_right[i] = safe_load_image(mlx, path, &w, &h);
+		free(path);
 	}
 
 	// Cargar animaciones coleccionables
 	for (int i = 0; i < 3; i++)
 	{
-		snprintf(path, sizeof(path), "images/C%d.xpm", i + 1);
-		game.collectable[i] = mlx_xpm_file_to_image(mlx, path, &w, &h);
+		path = image_path("images/C", i + 1, ".xpm");
+		game.collectable[i] = safe_load_image(mlx, path, &w, &h);
+		free(path);
 	}
 
 	// Cargar animaciones salida
 	for (int i = 0; i < 2; i++)
 	{
-		snprintf(path, sizeof(path), "images/E%d.xpm", i + 1);
-		game.exit[i] = mlx_xpm_file_to_image(mlx, path, &w, &h);
+		path = image_path("images/E", i + 1, ".xpm");
+		game.exit[i] = safe_load_image(mlx, path, &w, &h);
+		free(path);
 	}
 
 	return (game);

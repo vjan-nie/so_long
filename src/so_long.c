@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:36:17 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/27 17:32:10 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/28 12:55:08 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,11 @@ void	render_map(t_game *game)
 		}
 		y++;
 	}
-	mlx_put_image_to_window(game->mlx, game->win,
+	if (game->enemy_x != -1 && game->enemy_y != -1)
+	{
+		mlx_put_image_to_window(game->mlx, game->win,\
 		game->img_enemy, game->enemy_x * TILE_SIZE, game->enemy_y * TILE_SIZE);
+	}
 	char *str = ft_itoa(game->moves);
 	mlx_string_put(game->mlx, game->win, 20, 50, 0xFF00FF, str);
 	free(str);
@@ -92,12 +95,14 @@ int	animation_loop(t_game *game)
 		game->exit_counter = 0;
 		game->exit_index = (game->exit_index + 1) % 2;
 	}
-
-	game->enemy_timer++;
-	if (game->enemy_timer >= 800) // mueve cada 10 ciclos
+	if (game->enemy_x != -1 && game->enemy_y != -1)
 	{
-		game->enemy_timer = 0;
-		move_enemy(game);
+		game->enemy_timer++;
+		if (game->enemy_timer >= 400) // mueve cada 10 ciclos
+		{
+			game->enemy_timer = 0;
+			move_enemy(game);
+		}
 	}
 	render_map(game);
 	return (0);
@@ -139,6 +144,8 @@ void	move_enemy(t_game *game)
 	int new_x = game->enemy_x + dx;
 	int new_y = game->enemy_y + dy;
 
+	if (new_x < 0 || new_x >= game->width || new_y < 0 || new_y >= game->height)
+		return;
 	char tile = game->map[new_y][new_x];
 
 	if (tile == '0' || tile == 'P')

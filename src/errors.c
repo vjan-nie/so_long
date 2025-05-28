@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:03:52 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/26 13:21:11 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/28 14:06:10 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@ void	arg_error(char *error)
 	exit(1);
 }
 
-void	map_error(char *error)
+void	map_error(char **map, char *error)
 {
+	if (map)
+        free_map(map);
 	ft_putstr_fd(error, 2);
 	exit(1);
 }

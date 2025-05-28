@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:30:21 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/24 13:09:10 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/28 12:38:49 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,12 +97,14 @@ int	map_valid(char **map)
 	int		p;
 	int		e;
 	int		c;
+	int		enemy;
 
 	y = 0;
 	width = ft_strlen(map[0]);
 	p = 0;
 	e = 0;
 	c = 0;
+	enemy = 0;
 	while (map[y])
 	{
 		if (ft_strlen(map[y]) != width)
@@ -110,7 +112,7 @@ int	map_valid(char **map)
 		x = 0;
 		while (map[y][x])
 		{
-			if (!ft_strchr("01PCE\n", map[y][x]))
+			if (!ft_strchr("01PCEX\n", map[y][x]))
 				return(0);
 			if (((y == 0 || !map[y + 1]) || x == 0 || x == (int)width - 1)\
 			&& map[y][x] != '1')
@@ -121,6 +123,8 @@ int	map_valid(char **map)
 				e++;
 			if (map[y][x] == 'C')
 				c++;
+			if (map[y][x] == 'X')
+				enemy++;
 			x ++;
 		}
 		y++;
