@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:36:17 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/28 12:55:08 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/02 14:25:43 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 void	render_map(t_game *game)
 {
-	int	x, y;
 	void	*img;
 	char	tile;
+	int		x;
+	int		y;
 
 	y = 0;
 	while (y < game->height)
@@ -25,11 +26,8 @@ void	render_map(t_game *game)
 		while (x < game->width)
 		{
 			tile = game->map[y][x];
-
-			// fondo primero (por debajo de todo)
 			mlx_put_image_to_window(game->mlx, game->win,
 				game->img_background, x * TILE_SIZE, y * TILE_SIZE);
-
 			if (tile == '1')
 				img = game->img_wall;
 			else if (tile == 'P')
@@ -43,7 +41,7 @@ void	render_map(t_game *game)
 				else if (game->last_dir == 'r')
 					img = game->player_right[game->player_index];
 				else
-					img = game->player_down[0]; // por defecto
+					img = game->player_down[0];
 			}
 			else if (tile == 'C')
 				img = game->collectable[game->collectable_index];
@@ -51,7 +49,6 @@ void	render_map(t_game *game)
 				img = game->exit[game->exit_index];
 			else
 				img = NULL;
-
 			if (img)
 				mlx_put_image_to_window(game->mlx, game->win,
 					img, x * TILE_SIZE, y * TILE_SIZE);
@@ -69,51 +66,47 @@ void	render_map(t_game *game)
 	free(str);
 }
 
+void	enemy_animation(t_game *game)
+{
+	game->enemy_timer++;
+	if (game->enemy_timer >= 400)
+	{
+		game->enemy_timer = 0;
+		move_enemy(game);
+	}
+	return ;
+}
+
 int	animation_loop(t_game *game)
 {
 	game->frame_counter++;
 	game->collectable_counter++;
 	game->exit_counter++;
-
-	// Jugador: cada 6 ciclos (~100ms si tu loop va a ~60fps)
 	if (game->frame_counter >= 120)
 	{
 		game->frame_counter = 0;
 		game->player_index = (game->player_index + 1) % 4;
 	}
-
-	// Coleccionables: cada 15 ciclos (~250ms)
 	if (game->collectable_counter >= 200)
 	{
 		game->collectable_counter = 0;
 		game->collectable_index = (game->collectable_index + 1) % 3;
 	}
-
-	// Salida: cada 30 ciclos (~500ms)
 	if (game->exit_counter >= 300)
 	{
 		game->exit_counter = 0;
 		game->exit_index = (game->exit_index + 1) % 2;
 	}
-	if (game->enemy_x != -1 && game->enemy_y != -1)
-	{
-		game->enemy_timer++;
-		if (game->enemy_timer >= 400) // mueve cada 10 ciclos
-		{
-			game->enemy_timer = 0;
-			move_enemy(game);
-		}
-	}
+	if (game->enemy_x != -1)
+		enemy_animation(game);
 	render_map(game);
 	return (0);
 }
 
 int	handle_keypress(int keycode, t_game *game)
 {
-	if (keycode == 65307) // ESC
-		exit_game(game); // una función que libere recursos y cierre
-
-	// Movimiento: W A S D
+	if (keycode == 65307)
+		exit_game(game);
 	else if (keycode == 'w')
 		move_player(game, 0, -1);
 	else if (keycode == 'a')
@@ -122,7 +115,6 @@ int	handle_keypress(int keycode, t_game *game)
 		move_player(game, 0, 1);
 	else if (keycode == 'd')
 		move_player(game, 1, 0);
-
 	return (0);
 }
 
@@ -131,7 +123,6 @@ void	move_enemy(t_game *game)
 	int dx = 0;
 	int dy = 0;
 
-	// Dirección principal hacia el jugador
 	if (game->enemy_x < game->p_x)
 		dx = 1;
 	else if (game->enemy_x > game->p_x)
@@ -175,8 +166,6 @@ void	move_enemy(t_game *game)
 				game->enemy_x++;
 		}
 	}
-
-	// Verifica colisión con el jugador
 	if (game->enemy_x == game->p_x && game->enemy_y == game->p_y)
 	{
 		ft_printf("💀 GAME OVER!\n");
@@ -190,11 +179,9 @@ void	move_player(t_game *game, int dx, int dy)
 	int	new_y = game->p_y + dy;
 	char	next_tile = game->map[new_y][new_x];
 
-	// Si es muro, no se puede pasar
 	if (next_tile == '1')
 		return;
 
-	// Si es salida y aún quedan coleccionables, no se puede pasar
 	if (next_tile == 'E' && game->c > 0)
 		return;
 
@@ -208,11 +195,9 @@ void	move_player(t_game *game, int dx, int dy)
 	else if (dy == 1)
 		game->last_dir = 'd';
 
-	// Si es coleccionable, disminuir contador
 	if (next_tile == 'C')
 		game->c--;
 
-	// Si es salida y ya no quedan coleccionables, gana el juego
 	if (next_tile == 'E' && game->c == 0)
 	{
 		ft_printf("YOU WON!\n");
@@ -243,13 +228,10 @@ void	so_long(void *mlx, char **map)
 	win = mlx_new_window(mlx, width, height, "so_long");
 	if (!win)
 		ft_window_error(mlx, map);
-
 	game = game_init(mlx, win, map);
-
 	mlx_key_hook(win, handle_keypress, &game);
 	mlx_loop_hook(mlx, animation_loop, &game);
-	mlx_hook(win, 17, 0, handle_close, &game); // Cierre ventana
-
-	render_map(&game); // Primer render
+	mlx_hook(win, 17, 0, close_game_return, &game);
+	render_map(&game);
 	mlx_loop(mlx);
 }

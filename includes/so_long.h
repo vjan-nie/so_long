@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 15:29:05 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/30 12:54:35 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/02 14:07:25 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,10 @@ void	exit_game(t_game *game);
 void	render_map(t_game *game);
 void	move_enemy(t_game *game);
 void	move_player(t_game *game, int dx, int dy);
+void	enemy_animation(t_game *game);
+void	clear_player_images(t_game *game);
+void	clear_c_and_e_images(t_game *game);
+void	clear_static_images(t_game *game);
 void	*safe_load_image(void *mlx, const char *path, int *w, int *h);
 int		*elements_init(char **map);
 int		animation_loop(t_game *game);
@@ -99,7 +103,7 @@ int		collectables_reachable(t_game game);
 int		get_player_pos(char **map, int is_y);
 int		get_enemy_pos(char **map, int is_y);
 int		exit_reachable(t_game game);
-int		handle_close(t_game *game);
+int		close_game_return(t_game *game);
 int		handle_keypress(int keycode, t_game *game);
 int		animation_loop(t_game *game);
 int		flood_fill(char **temp, char c, int count, int y, int x, int height, int width);

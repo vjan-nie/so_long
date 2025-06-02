@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:14:19 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/28 14:29:01 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/02 14:09:24 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,59 +92,6 @@ int		get_enemy_pos(char **map, int is_y)
 	return (-1);
 }
 
-int	handle_close(t_game *game)
-{
-	exit_game(game);
-	return (0);
-}
-
-void	exit_game(t_game *game)
-{
-	if (game->mlx)
-	{
-		for (int i = 0; i < 4; i++)
-		{
-			if (game->player_down[i])
-				mlx_destroy_image(game->mlx, game->player_down[i]);
-			if (game->player_up[i])
-				mlx_destroy_image(game->mlx, game->player_up[i]);
-			if (game->player_left[i])
-				mlx_destroy_image(game->mlx, game->player_left[i]);
-			if (game->player_right[i])
-				mlx_destroy_image(game->mlx, game->player_right[i]);
-		}
-
-		for (int i = 0; i < 3; i++)
-		{
-			if (game->collectable[i])
-				mlx_destroy_image(game->mlx, game->collectable[i]);
-		}
-
-		for (int i = 0; i < 2; i++)
-		{
-			if (game->exit[i])
-				mlx_destroy_image(game->mlx, game->exit[i]);
-		}
-
-		if (game->img_wall)
-			mlx_destroy_image(game->mlx, game->img_wall);
-		if (game->img_background)
-			mlx_destroy_image(game->mlx, game->img_background);
-		if (game->img_enemy)
-    		mlx_destroy_image(game->mlx, game->img_enemy);
-
-		if (game->win)
-			mlx_destroy_window(game->mlx, game->win);
-
-		mlx_destroy_display(game->mlx);
-		free(game->mlx);
-	}
-
-	if (game->map)
-		free_map(game->map);
-
-	exit(0);
-}
 
 void	*safe_load_image(void *mlx, const char *path, int *w, int *h)
 {
@@ -199,7 +146,10 @@ t_game	game_init(void *mlx, void *win, char **map)
 	game.exit_index = 0;
 	game.last_dir = 'd';
 	game.enemy_x = get_enemy_pos(map, 0);
-	game.enemy_y = get_enemy_pos(map, 1);
+	if (game.enemy_x == -1)
+		game.enemy_y = -1;
+	else
+		game.enemy_y = get_enemy_pos(map, 1);
 	game.enemy_dx = 1;
 	game.enemy_dy = 0;
 	game.enemy_timer = 0;
