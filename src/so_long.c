@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   so_long.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:36:17 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/02 14:25:43 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/03 12:39:54 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,11 +118,58 @@ int	handle_keypress(int keycode, t_game *game)
 	return (0);
 }
 
+void	enemy_bounce(t_game *game, int dx, int dy)
+{
+	if (dx != 0) 
+	{
+		if (game->p_y < game->enemy_y &&
+			game->map[game->enemy_y - 1][game->enemy_x] == '0')
+			game->enemy_y--;
+		else if (game->p_y > game->enemy_y &&
+			game->map[game->enemy_y + 1][game->enemy_x] == '0')
+			game->enemy_y++;
+	}
+	else if (dy != 0)
+	{
+		if (game->p_x < game->enemy_x &&
+			game->map[game->enemy_y][game->enemy_x - 1] == '0')
+			game->enemy_x--;
+		else if (game->p_x > game->enemy_x &&
+			game->map[game->enemy_y][game->enemy_x + 1] == '0')
+			game->enemy_x++;
+	}
+	return ;
+}
+
+void	enemy_movement_result(t_game *game, int dx, int dy, char tile)
+{
+	char	tile;
+	int		new_x;
+	int		new_y;
+
+	new_x = game->enemy_x + dx;
+	new_y = game->enemy_y + dy;
+	if (new_x < 0 || new_x >= game->width || new_y < 0 || new_y >= game->height)
+		return ;
+	tile = game->map[new_y][new_x];
+	if (tile == '0' || tile == 'P')
+	{
+		game->enemy_x = new_x;
+		game->enemy_y = new_y;
+	}
+	else
+		enemy_bounce(game, dx, dy);
+	return ;
+}
+
 void	move_enemy(t_game *game)
 {
-	int dx = 0;
-	int dy = 0;
+	int 	dx;
+	int 	dy;
+	char	tile;
 
+	dx = 0;
+	dy = 0;
 	if (game->enemy_x < game->p_x)
 		dx = 1;
 	else if (game->enemy_x > game->p_x)
@@ -131,61 +178,21 @@ void	move_enemy(t_game *game)
 		dy = 1;
 	else if (game->enemy_y > game->p_y)
 		dy = -1;
-
-	int new_x = game->enemy_x + dx;
-	int new_y = game->enemy_y + dy;
-
-	if (new_x < 0 || new_x >= game->width || new_y < 0 || new_y >= game->height)
-		return;
-	char tile = game->map[new_y][new_x];
-
-	if (tile == '0' || tile == 'P')
-	{
-		game->enemy_x = new_x;
-		game->enemy_y = new_y;
-	}
-	else
-	{
-		// Rebote: intenta moverse en perpendicular
-		if (dx != 0) // intentaba moverse en X
-		{
-			if (game->p_y < game->enemy_y &&
-				game->map[game->enemy_y - 1][game->enemy_x] == '0')
-				game->enemy_y--;
-			else if (game->p_y > game->enemy_y &&
-				game->map[game->enemy_y + 1][game->enemy_x] == '0')
-				game->enemy_y++;
-		}
-		else if (dy != 0) // intentaba moverse en Y
-		{
-			if (game->p_x < game->enemy_x &&
-				game->map[game->enemy_y][game->enemy_x - 1] == '0')
-				game->enemy_x--;
-			else if (game->p_x > game->enemy_x &&
-				game->map[game->enemy_y][game->enemy_x + 1] == '0')
-				game->enemy_x++;
-		}
-	}
+	enemy_movement_result(game, dx, dy, tile);
 	if (game->enemy_x == game->p_x && game->enemy_y == game->p_y)
 	{
 		ft_printf("💀 GAME OVER!\n");
 		exit_game(game);
 	}
+	return ;
 }
 
-void	move_player(t_game *game, int dx, int dy)
+void	p_movement_result(t_game *game, int dx, int dy, char next_tile)
 {
-	int	new_x = game->p_x + dx;
-	int	new_y = game->p_y + dy;
-	char	next_tile = game->map[new_y][new_x];
-
 	if (next_tile == '1')
-		return;
-
+		return ;
 	if (next_tile == 'E' && game->c > 0)
-		return;
-
-	// Actualizar dirección del jugador
+		return ;
 	if (dx == 1)
 		game->last_dir = 'r';
 	else if (dx == -1)
@@ -194,26 +201,34 @@ void	move_player(t_game *game, int dx, int dy)
 		game->last_dir = 'u';
 	else if (dy == 1)
 		game->last_dir = 'd';
-
 	if (next_tile == 'C')
 		game->c--;
-
 	if (next_tile == 'E' && game->c == 0)
 	{
 		ft_printf("YOU WON!\n");
 		exit_game(game);
 	}
+	return ;
+}
 
-	// Mover jugador (no reemplazar la salida con '0')
-	// Para que no se borre la 'E', solo reemplazamos el 'P' anterior con '0'
+void	move_player(t_game *game, int dx, int dy)
+{
+	int		new_x;
+	int		new_y;
+	char	next_tile;
+
+	new_x = game->p_x + dx;
+	new_y = game->p_y + dy;
+	next_tile = game->map[new_y][new_x];
+	p_movement_result(game, dx, dy, next_tile);
 	game->map[game->p_y][game->p_x] = '0';
 	game->map[new_y][new_x] = 'P';
 	game->p_x = new_x;
 	game->p_y = new_y;
 	game->moves++;
-
-	ft_printf("Movimientos: %d\n", game->moves);
+	ft_printf("Moves: %d\n", game->moves);
 	render_map(game);
+	return ;
 }
 
 void	so_long(void *mlx, char **map)

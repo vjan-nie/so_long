@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:30:21 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/30 12:51:27 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/03 11:44:21 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	*elements_init(char **map)
 
 	elements = malloc(sizeof(int) * 4);
 	if (!elements)
-		map_error(map, "Elements malloc failed\n");
+		map_error(map, "Malloc to init elements failed\n");
 	i = 0;
 	while (i < 4)
 	{

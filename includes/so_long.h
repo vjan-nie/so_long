@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   so_long.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 15:29:05 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/02 14:07:25 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/03 12:18:21 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,9 @@ void	enemy_animation(t_game *game);
 void	clear_player_images(t_game *game);
 void	clear_c_and_e_images(t_game *game);
 void	clear_static_images(t_game *game);
+void	p_movement_result(t_game *game, int dx, int dy, char next_tile);
+void	enemy_movement_result(t_game *game, int dx, int dy, char tile);
+void	enemy_bounce(t_game *game, int dx, int dy);
 void	*safe_load_image(void *mlx, const char *path, int *w, int *h);
 int		*elements_init(char **map);
 int		animation_loop(t_game *game);
