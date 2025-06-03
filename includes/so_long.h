@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 15:29:05 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/03 14:32:37 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/03 16:50:11 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	arg_error(char *error);
 void	map_error(char **map, char *error);
 void	ft_mlx_error(char **map);
 void	ft_window_error(void *mlx, char **map);
+void	ft_img_error(void *mlx, void *win, char **map);
 void	free_map(char **map);
 void	free_elements(int *elements);
 void	exit_game(t_game *game);
@@ -88,7 +89,10 @@ void	clear_static_images(t_game *game);
 void	player_movement_result(t_game *game, int dx, int dy, char next_tile);
 void	enemy_movement_result(t_game *game, int dx, int dy, char tile);
 void	enemy_bounce(t_game *game, int dx, int dy);
-void	*safe_load_image(void *mlx, const char *path, int *w, int *h);
+void	draw_player(t_game *game, void *img);
+void	draw_tile(t_game *game, char tile, int y, int x);
+void	*load_static_image(void *mlx, void *win, char **map, const char *path);
+void	*load_moving_image(void *mlx, void *win, char **map, const char *path);
 int		*elements_init(char **map);
 int		animation_loop(t_game *game);
 int		name_check(char *s);
@@ -99,6 +103,7 @@ int		elements_are_valid(char **map, int y);
 int		is_rectangular(char **map);
 int		get_map_width(char **map);
 int		get_map_height(char **map);
+int		get_collectables(char **map);
 int		collectables_reachable(t_game game);
 int		get_player_pos(char **map, int is_y);
 int		get_enemy_pos(char **map, int is_y);

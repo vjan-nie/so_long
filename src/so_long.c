@@ -6,11 +6,49 @@
 /*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:36:17 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/03 14:37:50 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/03 16:03:00 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+
+void	draw_player(t_game *game, void *img)
+{
+	if (game->last_dir == 'u')
+		img = game->player_up[game->player_index];
+	else if (game->last_dir == 'd')
+		img = game->player_down[game->player_index];
+	else if (game->last_dir == 'l')
+		img = game->player_left[game->player_index];
+	else if (game->last_dir == 'r')
+		img = game->player_right[game->player_index];
+	else
+		img = game->player_down[0];
+	return ;
+}
+
+void	draw_tile(t_game *game, char tile, int y, int x)
+{
+	void	*img;
+
+	tile = game->map[y][x];
+	mlx_put_image_to_window(game->mlx, game->win, \
+	game->img_background, x * TILE_SIZE, y * TILE_SIZE);
+	if (tile == '1')
+		img = game->img_wall;
+	else if (tile == 'P')
+		draw_player(game, img);
+	else if (tile == 'C')
+		img = game->collectable[game->collectable_index];
+	else if (tile == 'E')
+		img = game->exit[game->exit_index];
+	else
+		img = NULL;
+	if (img)
+		mlx_put_image_to_window(game->mlx, game->win,
+			img, x * TILE_SIZE, y * TILE_SIZE);
+	return ;
+}
 
 void	render_map(t_game *game)
 {
@@ -25,33 +63,7 @@ void	render_map(t_game *game)
 		x = 0;
 		while (x < game->width)
 		{
-			tile = game->map[y][x];
-			mlx_put_image_to_window(game->mlx, game->win,
-				game->img_background, x * TILE_SIZE, y * TILE_SIZE);
-			if (tile == '1')
-				img = game->img_wall;
-			else if (tile == 'P')
-			{
-				if (game->last_dir == 'u')
-					img = game->player_up[game->player_index];
-				else if (game->last_dir == 'd')
-					img = game->player_down[game->player_index];
-				else if (game->last_dir == 'l')
-					img = game->player_left[game->player_index];
-				else if (game->last_dir == 'r')
-					img = game->player_right[game->player_index];
-				else
-					img = game->player_down[0];
-			}
-			else if (tile == 'C')
-				img = game->collectable[game->collectable_index];
-			else if (tile == 'E')
-				img = game->exit[game->exit_index];
-			else
-				img = NULL;
-			if (img)
-				mlx_put_image_to_window(game->mlx, game->win,
-					img, x * TILE_SIZE, y * TILE_SIZE);
+			draw_tile(game, tile, y, x);
 			x++;
 		}
 		y++;

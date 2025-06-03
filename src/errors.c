@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:03:52 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/28 14:06:10 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/03 16:54:02 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,14 @@ void	ft_window_error(void *mlx, char **map)
 	ft_putstr_fd("Window creation error\n", 2);
 	free_map(map);
 	mlx_destroy_display(mlx);
+	exit(1);
+}
+
+void	ft_img_error(void *mlx, void *win, char **map)
+{
+	ft_putstr_fd("Load image error\n", 2);
+	mlx_destroy_window(mlx, win);
+	mlx_destroy_display(mlx);
+	free(map);
 	exit(1);
 }
