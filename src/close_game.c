@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   close_game.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 14:08:50 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/02 14:09:35 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/03 13:44:55 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	close_game_return(t_game *game)
 void	clear_player_images(t_game *game)
 {
 	int	i;
-	
+
 	i = 0;
 	while (i < 4)
 	{
@@ -41,7 +41,7 @@ void	clear_player_images(t_game *game)
 void	clear_c_and_e_images(t_game *game)
 {
 	int	i;
-	
+
 	i = 0;
 	while (i < 3)
 	{

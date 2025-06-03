@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:36:17 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/03 12:39:54 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/03 14:37:50 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,12 @@ void	render_map(t_game *game)
 		}
 		y++;
 	}
-	if (game->enemy_x != -1 && game->enemy_y != -1)
+	if (game->enemy_x != -1)
 	{
 		mlx_put_image_to_window(game->mlx, game->win,\
 		game->img_enemy, game->enemy_x * TILE_SIZE, game->enemy_y * TILE_SIZE);
 	}
-	char *str = ft_itoa(game->moves);
-	mlx_string_put(game->mlx, game->win, 20, 50, 0xFF00FF, str);
-	free(str);
+	return ;
 }
 
 void	enemy_animation(t_game *game)
@@ -79,12 +77,12 @@ void	enemy_animation(t_game *game)
 
 int	animation_loop(t_game *game)
 {
-	game->frame_counter++;
-	game->collectable_counter++;
-	game->exit_counter++;
-	if (game->frame_counter >= 120)
+	game->player_timer++;
+	game->collectable_timer++;
+	game->exit_timer++;
+	if (game->player_timer >= 120)
 	{
-		game->frame_counter = 0;
+		game->player_timer = 0;
 		game->player_index = (game->player_index + 1) % 4;
 	}
 	if (game->collectable_counter >= 200)
@@ -92,9 +90,9 @@ int	animation_loop(t_game *game)
 		game->collectable_counter = 0;
 		game->collectable_index = (game->collectable_index + 1) % 3;
 	}
-	if (game->exit_counter >= 300)
+	if (game->exit_timer >= 300)
 	{
-		game->exit_counter = 0;
+		game->exit_timer = 0;
 		game->exit_index = (game->exit_index + 1) % 2;
 	}
 	if (game->enemy_x != -1)
@@ -122,19 +120,19 @@ void	enemy_bounce(t_game *game, int dx, int dy)
 {
 	if (dx != 0) 
 	{
-		if (game->p_y < game->enemy_y &&
+		if (game->player_y < game->enemy_y &&
 			game->map[game->enemy_y - 1][game->enemy_x] == '0')
 			game->enemy_y--;
-		else if (game->p_y > game->enemy_y &&
+		else if (game->player_y > game->enemy_y &&
 			game->map[game->enemy_y + 1][game->enemy_x] == '0')
 			game->enemy_y++;
 	}
 	else if (dy != 0)
 	{
-		if (game->p_x < game->enemy_x &&
+		if (game->player_x < game->enemy_x &&
 			game->map[game->enemy_y][game->enemy_x - 1] == '0')
 			game->enemy_x--;
-		else if (game->p_x > game->enemy_x &&
+		else if (game->player_x > game->enemy_x &&
 			game->map[game->enemy_y][game->enemy_x + 1] == '0')
 			game->enemy_x++;
 	}
@@ -170,16 +168,16 @@ void	move_enemy(t_game *game)
 
 	dx = 0;
 	dy = 0;
-	if (game->enemy_x < game->p_x)
+	if (game->enemy_x < game->player_x)
 		dx = 1;
-	else if (game->enemy_x > game->p_x)
+	else if (game->enemy_x > game->player_x)
 		dx = -1;
-	else if (game->enemy_y < game->p_y)
+	else if (game->enemy_y < game->player_y)
 		dy = 1;
-	else if (game->enemy_y > game->p_y)
+	else if (game->enemy_y > game->player_y)
 		dy = -1;
 	enemy_movement_result(game, dx, dy, tile);
-	if (game->enemy_x == game->p_x && game->enemy_y == game->p_y)
+	if (game->enemy_x == game->player_x && game->enemy_y == game->player_y)
 	{
 		ft_printf("💀 GAME OVER!\n");
 		exit_game(game);
@@ -187,11 +185,11 @@ void	move_enemy(t_game *game)
 	return ;
 }
 
-void	p_movement_result(t_game *game, int dx, int dy, char next_tile)
+void	player_movement_result(t_game *game, int dx, int dy, char next_tile)
 {
 	if (next_tile == '1')
 		return ;
-	if (next_tile == 'E' && game->c > 0)
+	if (next_tile == 'E' && game->collectable_counter > 0)
 		return ;
 	if (dx == 1)
 		game->last_dir = 'r';
@@ -202,8 +200,8 @@ void	p_movement_result(t_game *game, int dx, int dy, char next_tile)
 	else if (dy == 1)
 		game->last_dir = 'd';
 	if (next_tile == 'C')
-		game->c--;
-	if (next_tile == 'E' && game->c == 0)
+		game->collectable_counter --;
+	if (next_tile == 'E' && game->collectable_counter == 0)
 	{
 		ft_printf("YOU WON!\n");
 		exit_game(game);
@@ -217,14 +215,14 @@ void	move_player(t_game *game, int dx, int dy)
 	int		new_y;
 	char	next_tile;
 
-	new_x = game->p_x + dx;
-	new_y = game->p_y + dy;
+	new_x = game->player_x + dx;
+	new_y = game->player_y + dy;
 	next_tile = game->map[new_y][new_x];
-	p_movement_result(game, dx, dy, next_tile);
-	game->map[game->p_y][game->p_x] = '0';
+	player_movement_result(game, dx, dy, next_tile);
+	game->map[game->player_y][game->player_x] = '0';
 	game->map[new_y][new_x] = 'P';
-	game->p_x = new_x;
-	game->p_y = new_y;
+	game->player_x = new_x;
+	game->player_y = new_y;
 	game->moves++;
 	ft_printf("Moves: %d\n", game->moves);
 	render_map(game);
@@ -249,4 +247,5 @@ void	so_long(void *mlx, char **map)
 	mlx_hook(win, 17, 0, close_game_return, &game);
 	render_map(&game);
 	mlx_loop(mlx);
+	return ;
 }

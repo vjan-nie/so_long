@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 15:29:05 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/03 12:18:21 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/03 14:32:37 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,41 +29,38 @@ typedef struct s_game
 	char	**map;
 	int		width;
 	int		height;
-	int		p_x;
-	int		p_y;
-	int		c;
 	int		moves;
+	int		collectable_counter;
 
 	void	*img_wall;
 	void	*img_background;
 
-	void	*img_p;
-	void	*img_c;
-	void	*img_e;
-	void	*img_enemy;
-
+	int		player_x;
+	int		player_y;
+	void	*img_player;
+	char	last_dir;
+	int		player_index;
 	void	*player_down[4];
 	void	*player_up[4];
 	void	*player_left[4];
 	void	*player_right[4];
+	int		player_timer;
 
-	void	*collectable[3];
-	void	*exit[2];
-
-	int		player_index;
+	void	*img_collectable;
 	int		collectable_index;
+	void	*collectable[3];
+	int		collectable_timer;
+
+	void	*img_exit;
 	int		exit_index;
-
-	int		frame_counter;
-	int		collectable_counter;
-	int		exit_counter;
-
-	char	last_dir;
-
+	void	*exit[2];
+	int		exit_timer;
+	
 	int		enemy_x;
 	int		enemy_y;
-	int		enemy_dx; // dirección en x (1 o -1)
-	int		enemy_dy; // dirección en y (1 o -1)
+	int		enemy_dx;
+	int		enemy_dy;
+	void	*img_enemy;
 	int		enemy_timer;
 }			t_game;
 
@@ -88,7 +85,7 @@ void	enemy_animation(t_game *game);
 void	clear_player_images(t_game *game);
 void	clear_c_and_e_images(t_game *game);
 void	clear_static_images(t_game *game);
-void	p_movement_result(t_game *game, int dx, int dy, char next_tile);
+void	player_movement_result(t_game *game, int dx, int dy, char next_tile);
 void	enemy_movement_result(t_game *game, int dx, int dy, char tile);
 void	enemy_bounce(t_game *game, int dx, int dy);
 void	*safe_load_image(void *mlx, const char *path, int *w, int *h);

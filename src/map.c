@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:04:50 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/30 12:45:11 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/03 13:45:25 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ char	**load_map(char *map_file)
 int	map_is_valid(char **map)
 {
 	int	y;
-	
+
 	y = 0;
 	if (!is_rectangular(map))
 		return (0);

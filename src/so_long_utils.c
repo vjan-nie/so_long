@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:14:19 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/03 11:46:48 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/03 14:11:39 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,15 +133,16 @@ t_game	game_init(void *mlx, void *win, char **map)
 	game.map = map;
 	game.width = get_map_width(map);
 	game.height = get_map_height(map);
-	game.c = 0;
-	game.moves = 0;
-	game.p_x = get_player_pos(map, 0);
-	game.p_y = get_player_pos(map, 1);
-	game.frame_counter = 0;
-	game.collectable_counter = 0;
-	game.exit_counter = 0;
-	game.player_index = 0;
 	game.collectable_index = 0;
+	game.moves = 0;
+	game.player_x = get_player_pos(map, 0);
+	game.player_y = get_player_pos(map, 1);
+	game.player_timer = 0;
+	game.collectable_counter = 0;
+	game.collectable_timer = 0;
+	game.exit_timer = 0;
+	game.player_index = 0;
+
 	game.exit_index = 0;
 	game.last_dir = 'd';
 	game.enemy_x = get_enemy_pos(map, 0);
@@ -162,11 +163,11 @@ t_game	game_init(void *mlx, void *win, char **map)
 		{
 			if (map[y][x] == 'P')
 			{
-				game.p_y = y;
-				game.p_x = x;
+				game.player_y = y;
+				game.player_x = x;
 			}
 			else if (map[y][x] == 'C')
-				game.c++;
+				game.collectable_counter ++;
 		}
 	}
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_tests.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:40:42 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/30 12:48:54 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/03 13:54:11 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ int	exit_reachable(t_game game)
 	temp = map_dup(game);
 	if (!temp)
 		return (0);
-	y = game.p_y;
-	x = game.p_x;
+	y = game.player_y;
+	x = game.player_x;
 	count = 1;
 	count = flood_fill(temp, 'E', count, y, x, game.height, game.width);
 	free_map(temp);
@@ -40,9 +40,9 @@ int	collectables_reachable(t_game game)
 	temp = map_dup(game);
 	if (!temp)
 		return (0);
-	y = game.p_y;
-	x = game.p_x;
-	count = (game.c);
+	y = game.player_y;
+	x = game.player_x;
+	count = (game.collectable_counter);
 	count = flood_fill(temp, 'C', count, y, x, game.height, game.width);
 	free_map(temp);
 	return (count == 0);
