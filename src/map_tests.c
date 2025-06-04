@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_tests.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:40:42 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/03 13:54:11 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/04 14:10:28 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ int	limits_and_elements(char **map)
 		while (map[y][x])
 		{
 			if (!ft_strchr("01PCEX\n", map[y][x]))
-				return(0);
-			if (((y == 0 || !map[y + 1]) || x == 0 || x == (int)width - 1)\
+				return (0);
+			if (((y == 0 || !map[y + 1]) || x == 0 || x == (int)width - 1) \
 			&& map[y][x] != '1')
 				return (0);
 			x ++;
@@ -91,10 +91,8 @@ int	limits_and_elements(char **map)
 	return (1);
 }
 
-/* 
-elements[]: 0 - player / 1 - exit / 2 - collectible / 3 - enemy
- */
 int	elements_are_valid(char **map, int y)
+//elements[]: 0 - player / 1 - exit / 2 - collectible / 3 - enemy
 {
 	int		*elements;
 	int		x;
@@ -117,7 +115,8 @@ int	elements_are_valid(char **map, int y)
 		}
 		y++;
 	}
-	if (elements[0] != 1 || elements[1] != 1 || elements[2] < 1 || elements[3] > 1)
+	if (elements[0] != 1 || elements[1] != 1 \
+	|| elements[2] < 1 || elements[3] > 1)
 		return (free_elements(elements), 0);
 	return (free_elements(elements), 1);
 }

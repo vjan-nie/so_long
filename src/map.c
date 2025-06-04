@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:04:50 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/03 13:45:25 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/04 14:06:36 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void free_map(char **map)
+void	free_map(char **map)
 {
 	int	i;
 
 	if (!map)
-		return;
+		return ;
 	i = 0;
 	while (map[i] != NULL)
 	{
@@ -28,7 +28,24 @@ void free_map(char **map)
 	return ;
 }
 
+int	map_is_valid(char **map)
+{
+	int	y;
+
+	y = 0;
+	if (get_map_width(map) < 1)
+		return (0);
+	if (!is_rectangular(map))
+		return (0);
+	if (!limits_and_elements(map))
+		return (0);
+	if (!elements_are_valid(map, y))
+		return (0);
+	return (1);
+}
+
 char	**get_map(char **map, int fd)
+//Read and safe in array
 {
 	char	*line;
 	char	*clean_line;
@@ -55,7 +72,7 @@ char	**get_map(char **map, int fd)
 	return (map);
 }
 
-char	**load_map(char *map_file)
+char	**load_map(char *map_file) //Prepare
 {
 	int		fd;
 	char	**map;
@@ -75,18 +92,4 @@ char	**load_map(char *map_file)
 	}
 	map = get_map(map, fd);
 	return (map);
-}
-
-int	map_is_valid(char **map)
-{
-	int	y;
-
-	y = 0;
-	if (!is_rectangular(map))
-		return (0);
-	if (!limits_and_elements(map))
-		return (0);
-	if (!elements_are_valid(map, y))
-		return (0);
-	return (1);
 }

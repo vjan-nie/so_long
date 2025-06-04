@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   close_game.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 14:08:50 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/03 16:54:46 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/04 14:06:02 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	close_game_return(t_game *game)
 {
-	exit_game(game);
+	exit_game(game, 0);
 	return (0);
 }
 
@@ -66,11 +66,11 @@ void	clear_static_images(t_game *game)
 	if (game->img_background)
 		mlx_destroy_image(game->mlx, game->img_background);
 	if (game->img_enemy)
-    	mlx_destroy_image(game->mlx, game->img_enemy);
+		mlx_destroy_image(game->mlx, game->img_enemy);
 	return ;
 }
 
-void	exit_game(t_game *game)
+void	exit_game(t_game *game, int error)
 {
 	if (game->mlx)
 	{
@@ -83,5 +83,7 @@ void	exit_game(t_game *game)
 	}
 	if (game->map)
 		free_map(game->map);
+	if (error)
+		exit(1);
 	exit(0);
 }

@@ -6,7 +6,7 @@
 #    By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/17 12:24:16 by vjan-nie          #+#    #+#              #
-#    Updated: 2025/06/02 14:10:03 by vjan-nie         ###   ########.fr        #
+#    Updated: 2025/06/04 13:58:54 by vjan-nie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,12 +39,18 @@ MINILIBX	=	$(MINILIBX_DIR)/libmlx_linux.a
 SRC		=	$(SRC_DIR)/main.c\
 			$(SRC_DIR)/so_long.c\
 			$(SRC_DIR)/so_long_utils.c\
-			$(SRC_DIR)/arg_check.c\
-			$(SRC_DIR)/errors.c\
-			$(SRC_DIR)/close_game.c\
 			$(SRC_DIR)/map.c\
 			$(SRC_DIR)/map_tests.c\
-			$(SRC_DIR)/map_utils.c
+			$(SRC_DIR)/map_utils.c\
+			$(SRC_DIR)/game.c\
+			$(SRC_DIR)/game_utils.c\
+			$(SRC_DIR)/images.c\
+			$(SRC_DIR)/animation.c\
+			$(SRC_DIR)/arg_check.c\
+			$(SRC_DIR)/errors.c\
+			$(SRC_DIR)/close_game.c
+			
+			
 
 # Objects
 

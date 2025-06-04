@@ -3,230 +3,123 @@
 /*                                                        :::      ::::::::   */
 /*   so_long_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:14:19 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/03 16:54:40 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/04 14:08:40 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	get_map_width(char **map)
+void	enemy_bounce(t_game *game, int dx, int dy)
 {
-	char	*temp;
-	int		width;
-
-	temp = *map;
-	width = 0;
-	while (*temp)
+	if (dx != 0)
 	{
-		width ++;
-		temp ++;
+		if (game->player_y < game->enemy_y && \
+			game->map[game->enemy_y - 1][game->enemy_x] == '0')
+			game->enemy_y--;
+		else if (game->player_y > game->enemy_y && \
+			game->map[game->enemy_y + 1][game->enemy_x] == '0')
+			game->enemy_y++;
 	}
-	return (width);
-}
-
-int	get_map_height(char **map)
-{
-	char	**temp;
-	int		height;
-
-	temp = map;
-	height = 0;
-	while (*temp)
+	else if (dy != 0)
 	{
-		height ++;
-		temp ++;
+		if (game->player_x < game->enemy_x && \
+			game->map[game->enemy_y][game->enemy_x - 1] == '0')
+			game->enemy_x--;
+		else if (game->player_x > game->enemy_x && \
+			game->map[game->enemy_y][game->enemy_x + 1] == '0')
+			game->enemy_x++;
 	}
-	return (height);
+	return ;
 }
 
-int		get_player_pos(char **map, int is_y)
+void	enemy_movement_result(t_game *game, int dx, int dy)
 {
-	int	y;
-	int	x;
+	int		new_x;
+	int		new_y;
+	char	tile;
 
-	y = 0;
-	while (map[y])
+	new_x = game->enemy_x + dx;
+	new_y = game->enemy_y + dy;
+	if (new_x < 0 || new_x >= game->width || new_y < 0 || new_y >= game->height)
+		return ;
+	tile = game->map[new_y][new_x];
+	if (tile == '0' || tile == 'P')
 	{
-		x = 0;
-		while (map[y][x])
-		{
-			if (map[y][x] == 'P')
-			{
-				if (is_y == 1)
-					return (y);
-				else
-					return (x);
-			}
-			x++;
-		}
-		y++;
+		game->enemy_x = new_x;
+		game->enemy_y = new_y;
 	}
-	return (-1);
-}
-
-int		get_enemy_pos(char **map, int is_y)
-{
-	int	y;
-	int	x;
-
-	y = 0;
-	while (map[y])
-	{
-		x = 0;
-		while (map[y][x])
-		{
-			if (map[y][x] == 'X')
-			{
-				if (is_y == 1)
-					return (y);
-				else
-					return (x);
-			}
-			x++;
-		}
-		y++;
-	}
-	return (-1);
-}
-
-void	*load_static_image(void *mlx, void *win, char **map, const char *path)
-{
-	void	*img;
-	int		w;
-	int		h;
-
-	img = mlx_xpm_file_to_image(mlx, (char *)path, &w, &h);
-	if (!img)
-		ft_img_error(mlx, win, map);
-	return (img);
-}
-
-void	*load_moving_image(void *mlx, void *win, char **map, const char *path)
-{
-	void	*img;
-	int		w;
-	int		h;
-
-	img = mlx_xpm_file_to_image(mlx, (char *)path, &w, &h);
-	if (!img)
-	{
-		free(path);
-		ft_img_error(mlx, win, map);
-	}
-	return (img);
-}
-
-char	*image_path(const char *prefix, int index, const char *suffix)
-{
-	char	*number;
-	char	*temp;
-	char	*result;
-
-	number = ft_itoa(index);
-	if (!number)
-		return (NULL);
-	temp = ft_strjoin(prefix, number);
-	free(number);
-	if (!temp)
-		return (NULL);
-	result = ft_strjoin(temp, suffix);
-	free(temp);
-	return (result);
-}
-
-int	get_collectables(char **map)
-{
-	int	y;
-	int	x;
-	int	count;
-
-	count = 0;
-	y = 0;
-	while (map[y])
-	{
-		x = 0;
-		while (map[y][x])
-		{
-			if (map[y][x] == 'C')
-				count ++;
-			x ++;
-		}
-		y ++;
-	}
-	return (count);
-}
-
-t_game	game_init(void *mlx, void *win, char **map)
-{
-	t_game	game;
-	char	*path;
-
-	ft_bzero(&game, sizeof(t_game));
-	game.mlx = mlx;
-	game.win = win;
-	game.map = map;
-	game.width = get_map_width(map);
-	game.height = get_map_height(map);
-	game.collectable_index = 0;
-	game.moves = 0;
-	game.player_x = get_player_pos(map, 0);
-	game.player_y = get_player_pos(map, 1);
-	game.player_timer = 0;
-	game.collectable_counter = get_collectables(map);
-	game.collectable_timer = 0;
-	game.exit_timer = 0;
-	game.player_index = 0;
-	game.exit_index = 0;
-	game.last_dir = 'd';
-	game.enemy_x = get_enemy_pos(map, 0);
-	if (game.enemy_x == -1)
-		game.enemy_y = -1;
 	else
-		game.enemy_y = get_enemy_pos(map, 1);
-	game.enemy_dx = 1;
-	game.enemy_dy = 0;
-	game.enemy_timer = 0;
+		enemy_bounce(game, dx, dy);
+	return ;
+}
 
-	// wall, background & enemy
-	game.img_wall = load_static_image(mlx, win, map, "images/wall2.xpm");
-	game.img_background = load_static_image(mlx, win, map, "images/background.xpm");
-	if (game.enemy_x != -1 && game.enemy_y != -1)
-		game.img_enemy = load_static_image(mlx, win, map, "images/enemy.xpm");
-	// player animation
-	for (int i = 0; i < 4; i++)
+void	move_enemy(t_game *game)
+{
+	int	dx;
+	int	dy;
+
+	dx = 0;
+	dy = 0;
+	if (game->enemy_x < game->player_x)
+		dx = 1;
+	else if (game->enemy_x > game->player_x)
+		dx = -1;
+	else if (game->enemy_y < game->player_y)
+		dy = 1;
+	else if (game->enemy_y > game->player_y)
+		dy = -1;
+	enemy_movement_result(game, dx, dy);
+	if (game->enemy_x == game->player_x && game->enemy_y == game->player_y)
 	{
-		path = image_path("images/P_down", i + 1, ".xpm");
-		game.player_down[i] = load_moving_image(mlx, win, map, path);
-		free(path);
-		path = image_path("images/P_up", i + 1, ".xpm");
-		game.player_up[i] = load_moving_image(mlx, win, map, path);
-		free(path);
-		path = image_path("images/P_left", i + 1, ".xpm");
-		game.player_left[i] = load_moving_image(mlx, win, map, path);
-		free(path);
-		path = image_path("images/P_right", i + 1, ".xpm");
-		game.player_right[i] = load_moving_image(mlx, win, map, path);
-		free(path);
+		ft_printf("💀 GAME OVER!\n");
+		exit_game(game, 0);
 	}
+	return ;
+}
 
-	// Cs animation
-	for (int i = 0; i < 3; i++)
+void	player_movement_result(t_game *game, int dx, int dy, char next_tile)
+{
+	if (next_tile == '1')
+		return ;
+	if (next_tile == 'E' && game->collectable_counter > 0)
+		return ;
+	if (dx == 1)
+		game->last_dir = 'r';
+	else if (dx == -1)
+		game->last_dir = 'l';
+	else if (dy == -1)
+		game->last_dir = 'u';
+	else if (dy == 1)
+		game->last_dir = 'd';
+	if (next_tile == 'C')
+		game->collectable_counter --;
+	if (next_tile == 'E' && game->collectable_counter == 0)
 	{
-		path = image_path("images/C", i + 1, ".xpm");
-		game.collectable[i] = load_moving_image(mlx, win, map, path);
-		free(path);
+		ft_printf("YOU WON!\n");
+		exit_game(game, 0);
 	}
+	return ;
+}
 
-	// exit animation
-	for (int i = 0; i < 2; i++)
-	{
-		path = image_path("images/E", i + 1, ".xpm");
-		game.exit[i] = load_moving_image(mlx, win, map, path);
-		free(path);
-	}
+void	move_player(t_game *game, int dx, int dy)
+{
+	int		new_x;
+	int		new_y;
+	char	next_tile;
 
-	return (game);
+	new_x = game->player_x + dx;
+	new_y = game->player_y + dy;
+	next_tile = game->map[new_y][new_x];
+	player_movement_result(game, dx, dy, next_tile);
+	game->map[game->player_y][game->player_x] = '0';
+	game->map[new_y][new_x] = 'P';
+	game->player_x = new_x;
+	game->player_y = new_y;
+	game->moves++;
+	ft_printf("Moves: %d\n", game->moves);
+	render_map(game);
+	return ;
 }

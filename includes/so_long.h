@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   so_long.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 15:29:05 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/03 16:50:11 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/04 14:04:13 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ typedef struct s_game
 	int		exit_index;
 	void	*exit[2];
 	int		exit_timer;
-	
+
 	int		enemy_x;
 	int		enemy_y;
 	int		enemy_dx;
@@ -75,10 +75,10 @@ void	arg_error(char *error);
 void	map_error(char **map, char *error);
 void	ft_mlx_error(char **map);
 void	ft_window_error(void *mlx, char **map);
-void	ft_img_error(void *mlx, void *win, char **map);
+void	ft_img_error(t_game *game);
 void	free_map(char **map);
 void	free_elements(int *elements);
-void	exit_game(t_game *game);
+void	exit_game(t_game *game, int error);
 void	render_map(t_game *game);
 void	move_enemy(t_game *game);
 void	move_player(t_game *game, int dx, int dy);
@@ -87,12 +87,15 @@ void	clear_player_images(t_game *game);
 void	clear_c_and_e_images(t_game *game);
 void	clear_static_images(t_game *game);
 void	player_movement_result(t_game *game, int dx, int dy, char next_tile);
-void	enemy_movement_result(t_game *game, int dx, int dy, char tile);
+void	enemy_movement_result(t_game *game, int dx, int dy);
 void	enemy_bounce(t_game *game, int dx, int dy);
-void	draw_player(t_game *game, void *img);
-void	draw_tile(t_game *game, char tile, int y, int x);
-void	*load_static_image(void *mlx, void *win, char **map, const char *path);
-void	*load_moving_image(void *mlx, void *win, char **map, const char *path);
+void	draw_tile(t_game *game, int y, int x);
+void	get_frames(t_game *game);
+void	get_static_frames(t_game *game);
+void	get_player_frames(t_game *game);
+void	enemy_init(t_game *game);
+void	*draw_player(t_game *game);
+void	*safe_load_image(t_game *game, const char *path, int moving);
 int		*elements_init(char **map);
 int		animation_loop(t_game *game);
 int		name_check(char *s);
@@ -111,6 +114,6 @@ int		exit_reachable(t_game game);
 int		close_game_return(t_game *game);
 int		handle_keypress(int keycode, t_game *game);
 int		animation_loop(t_game *game);
-int		flood_fill(char **temp, char c, int count, int y, int x, int height, int width);
+int		flood_fill(char **temp, char c, int count, int y, int x, int h, int w);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:30:21 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/03 11:44:21 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/04 14:09:18 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,11 @@ int	map_len(char *map_file)
 	return (rows);
 }
 
-int	flood_fill(char **temp, char c, int count, int y, int x, int height, int width)
+int	flood_fill(char **temp, char c, int count, int y, int x, int h, int w)
 {
 	if (count == 0)
 		return (count);
-	if (y < 0 || x < 0 || y >= height|| x >= width)
+	if (y < 0 || x < 0 || y >= height || x >= width)
 		return (count);
 	if ((temp[y][x] == 'F' || temp[y][x] != 0) \
 	&& temp[y][x] != 'P' && temp[y][x] != c)
