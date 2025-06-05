@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:40:42 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/04 14:10:28 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/05 11:36:59 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	exit_reachable(t_game game)
 	y = game.player_y;
 	x = game.player_x;
 	count = 1;
-	count = flood_fill(temp, 'E', count, y, x, game.height, game.width);
+	count = flood_fill_exit(temp, count, y, x);
 	free_map(temp);
 	return (count == 0);
 }
@@ -43,7 +43,7 @@ int	collectables_reachable(t_game game)
 	y = game.player_y;
 	x = game.player_x;
 	count = (game.collectable_counter);
-	count = flood_fill(temp, 'C', count, y, x, game.height, game.width);
+	count = flood_fill_collect(temp, count, y, x);
 	free_map(temp);
 	return (count == 0);
 }

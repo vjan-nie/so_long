@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 14:08:50 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/04 14:06:02 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:05:04 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	exit_game(t_game *game, int error)
 	{
 		clear_player_images(game);
 		clear_c_and_e_images(game);
+		clear_static_images(game);
 		if (game->win)
 			mlx_destroy_window(game->mlx, game->win);
 		mlx_destroy_display(game->mlx);

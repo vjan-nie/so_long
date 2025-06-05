@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 15:29:05 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/04 14:04:13 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/05 11:51:15 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ void	enemy_animation(t_game *game);
 void	clear_player_images(t_game *game);
 void	clear_c_and_e_images(t_game *game);
 void	clear_static_images(t_game *game);
-void	player_movement_result(t_game *game, int dx, int dy, char next_tile);
 void	enemy_movement_result(t_game *game, int dx, int dy);
 void	enemy_bounce(t_game *game, int dx, int dy);
 void	draw_tile(t_game *game, int y, int x);
@@ -98,6 +97,7 @@ void	*draw_player(t_game *game);
 void	*safe_load_image(t_game *game, const char *path, int moving);
 int		*elements_init(char **map);
 int		animation_loop(t_game *game);
+int		player_movement_result(t_game *game, int dx, int dy, char next_tile);
 int		name_check(char *s);
 int		map_len(char *map_file);
 int		map_is_valid(char **map);
@@ -114,6 +114,7 @@ int		exit_reachable(t_game game);
 int		close_game_return(t_game *game);
 int		handle_keypress(int keycode, t_game *game);
 int		animation_loop(t_game *game);
-int		flood_fill(char **temp, char c, int count, int y, int x, int h, int w);
+int		flood_fill_collect(char **temp, int count, int y, int x);
+int		flood_fill_exit(char **temp, int count, int y, int x);
 
 #endif

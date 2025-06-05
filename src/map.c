@@ -6,11 +6,32 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:04:50 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/04 14:06:36 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/05 11:31:16 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+
+int	map_len(char *map_file)
+{
+	int		fd;
+	char	*line;
+	int		rows;
+
+	fd = open(map_file, O_RDONLY);
+	if (fd == -1)
+		return (-1);
+	rows = 0;
+	line = get_next_line(fd);
+	while (line != NULL)
+	{
+		rows++;
+		free(line);
+		line = get_next_line(fd);
+	}
+	close(fd);
+	return (rows);
+}
 
 void	free_map(char **map)
 {
@@ -44,8 +65,7 @@ int	map_is_valid(char **map)
 	return (1);
 }
 
-char	**get_map(char **map, int fd)
-//Read and safe in array
+char	**get_map(char **map, int fd) //Read and safe in array
 {
 	char	*line;
 	char	*clean_line;

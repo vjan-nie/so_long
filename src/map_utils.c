@@ -6,49 +6,47 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:30:21 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/04 14:09:18 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/05 11:37:03 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	map_len(char *map_file)
-{
-	int		fd;
-	char	*line;
-	int		rows;
-
-	fd = open(map_file, O_RDONLY);
-	if (fd == -1)
-		return (-1);
-	rows = 0;
-	line = get_next_line(fd);
-	while (line != NULL)
-	{
-		rows++;
-		free(line);
-		line = get_next_line(fd);
-	}
-	close(fd);
-	return (rows);
-}
-
-int	flood_fill(char **temp, char c, int count, int y, int x, int h, int w)
+int	flood_fill_collect(char **temp, int count, int y, int x)
 {
 	if (count == 0)
 		return (count);
-	if (y < 0 || x < 0 || y >= height || x >= width)
+	if (y < 0 || x < 0 || !temp[y] || temp[y][x] == '\0')
 		return (count);
 	if ((temp[y][x] == 'F' || temp[y][x] != 0) \
-	&& temp[y][x] != 'P' && temp[y][x] != c)
+	&& temp[y][x] != 'P' && temp[y][x] != 'C')
 		return (count);
-	if (temp[y][x] == c)
+	if (temp[y][x] == 'C')
 		count --;
 	temp[y][x] = 'F';
-	count = flood_fill(temp, c, count, y -1, x, height, width);
-	count = flood_fill(temp, c, count, y +1, x, height, width);
-	count = flood_fill(temp, c, count, y, x -1, height, width);
-	count = flood_fill(temp, c, count, y, x +1, height, width);
+	count = flood_fill_collect(temp, count, y -1, x);
+	count = flood_fill_collect(temp, count, y +1, x);
+	count = flood_fill_collect(temp, count, y, x -1);
+	count = flood_fill_collect(temp, count, y, x +1);
+	return (count);
+}
+
+int	flood_fill_exit(char **temp, int count, int y, int x)
+{
+	if (count == 0)
+		return (count);
+	if (y < 0 || x < 0 || !temp[y] || temp[y][x] == '\0')
+		return (count);
+	if ((temp[y][x] == 'F' || temp[y][x] != 0) \
+	&& temp[y][x] != 'P' && temp[y][x] != 'E')
+		return (count);
+	if (temp[y][x] == 'E')
+		count --;
+	temp[y][x] = 'F';
+	count = flood_fill_exit(temp, count, y -1, x);
+	count = flood_fill_exit(temp, count, y +1, x);
+	count = flood_fill_exit(temp, count, y, x -1);
+	count = flood_fill_exit(temp, count, y, x +1);
 	return (count);
 }
 

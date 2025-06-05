@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:14:19 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/04 14:08:40 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/05 11:50:42 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,12 @@ void	move_enemy(t_game *game)
 	return ;
 }
 
-void	player_movement_result(t_game *game, int dx, int dy, char next_tile)
+int	player_movement_result(t_game *game, int dx, int dy, char next_tile)
 {
 	if (next_tile == '1')
-		return ;
+		return (0);
 	if (next_tile == 'E' && game->collectable_counter > 0)
-		return ;
+		return (0);
 	if (dx == 1)
 		game->last_dir = 'r';
 	else if (dx == -1)
@@ -101,7 +101,7 @@ void	player_movement_result(t_game *game, int dx, int dy, char next_tile)
 		ft_printf("YOU WON!\n");
 		exit_game(game, 0);
 	}
-	return ;
+	return (1);
 }
 
 void	move_player(t_game *game, int dx, int dy)
@@ -113,7 +113,8 @@ void	move_player(t_game *game, int dx, int dy)
 	new_x = game->player_x + dx;
 	new_y = game->player_y + dy;
 	next_tile = game->map[new_y][new_x];
-	player_movement_result(game, dx, dy, next_tile);
+	if (!player_movement_result(game, dx, dy, next_tile))
+		return ;
 	game->map[game->player_y][game->player_x] = '0';
 	game->map[new_y][new_x] = 'P';
 	game->player_x = new_x;
