@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:04:50 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/05 11:31:16 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/10 16:29:09 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,10 @@ int	map_is_valid(char **map)
 	if (!limits_and_elements(map))
 		return (0);
 	if (!elements_are_valid(map, y))
+		return (0);
+	if (!collectables_reachable(map))
+		return (0);
+	if (!exit_reachable(map))
 		return (0);
 	return (1);
 }

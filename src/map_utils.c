@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:30:21 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/05 11:37:03 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/10 17:05:09 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	flood_fill_collect(char **temp, int count, int y, int x)
 		return (count);
 	if (y < 0 || x < 0 || !temp[y] || temp[y][x] == '\0')
 		return (count);
-	if ((temp[y][x] == 'F' || temp[y][x] != 0) \
+	if ((temp[y][x] == 'F' || temp[y][x] == 1 || temp[y][x] == 'E') \
 	&& temp[y][x] != 'P' && temp[y][x] != 'C')
 		return (count);
 	if (temp[y][x] == 'C')
@@ -38,7 +38,7 @@ int	flood_fill_exit(char **temp, int count, int y, int x)
 	if (y < 0 || x < 0 || !temp[y] || temp[y][x] == '\0')
 		return (count);
 	if ((temp[y][x] == 'F' || temp[y][x] != 0) \
-	&& temp[y][x] != 'P' && temp[y][x] != 'E')
+	&& temp[y][x] != 'P'&& temp[y][x] != 'E')
 		return (count);
 	if (temp[y][x] == 'E')
 		count --;
@@ -50,14 +50,12 @@ int	flood_fill_exit(char **temp, int count, int y, int x)
 	return (count);
 }
 
-char	**map_dup(t_game game)
+char	**map_dup(char **map)
 {
-	char	**map;
 	char	**temp;
 	int		row;
 
-	map = game.map;
-	temp = malloc(sizeof(char *) * (game.height + 1));
+	temp = malloc(sizeof(char *) * (get_map_height(map) + 1));
 	if (!temp)
 		return (NULL);
 	row = 0;

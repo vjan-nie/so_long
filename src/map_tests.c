@@ -3,46 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   map_tests.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:40:42 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/05 11:36:59 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/10 16:26:57 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	exit_reachable(t_game game)
+int	exit_reachable(char **map)
 {
 	int		y;
 	int		x;
 	int		count;
 	char	**temp;
 
-	temp = map_dup(game);
+	temp = map_dup(map);
 	if (!temp)
 		return (0);
-	y = game.player_y;
-	x = game.player_x;
+	y = get_player_pos(map, 1);
+	x = get_player_pos(map, 0);
 	count = 1;
 	count = flood_fill_exit(temp, count, y, x);
 	free_map(temp);
 	return (count == 0);
 }
 
-int	collectables_reachable(t_game game)
+int	collectables_reachable(char **map)
 {
 	int		y;
 	int		x;
 	int		count;
 	char	**temp;
 
-	temp = map_dup(game);
+	temp = map_dup(map);
 	if (!temp)
 		return (0);
-	y = game.player_y;
-	x = game.player_x;
-	count = (game.collectable_counter);
+	y = get_player_pos(map, 1);
+	x = get_player_pos(map, 0);
+	count = get_collectables(map);
 	count = flood_fill_collect(temp, count, y, x);
 	free_map(temp);
 	return (count == 0);

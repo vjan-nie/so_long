@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   so_long.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 15:29:05 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/05 11:51:15 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/10 16:27:44 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef struct s_game
 t_game	game_init(void *mlx, void *win, char **map);
 char	**load_map(char *map_file);
 char	**get_map(char **map, int fd);
-char	**map_dup(t_game game);
+char	**map_dup(char **map);
 char	*image_path(const char *prefix, int index, const char *suffix);
 void	so_long(void *mlx, char **map);
 void	arg_check(int argc, char **argv);
@@ -107,10 +107,10 @@ int		is_rectangular(char **map);
 int		get_map_width(char **map);
 int		get_map_height(char **map);
 int		get_collectables(char **map);
-int		collectables_reachable(t_game game);
+int		collectables_reachable(char **map);
 int		get_player_pos(char **map, int is_y);
 int		get_enemy_pos(char **map, int is_y);
-int		exit_reachable(t_game game);
+int		exit_reachable(char **map);
 int		close_game_return(t_game *game);
 int		handle_keypress(int keycode, t_game *game);
 int		animation_loop(t_game *game);
