@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:30:21 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/10 17:05:09 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/11 12:29:34 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ int	flood_fill_collect(char **temp, int count, int y, int x)
 		return (count);
 	if (y < 0 || x < 0 || !temp[y] || temp[y][x] == '\0')
 		return (count);
-	if ((temp[y][x] == 'F' || temp[y][x] == 1 || temp[y][x] == 'E') \
-	&& temp[y][x] != 'P' && temp[y][x] != 'C')
+	if (temp[y][x] == 'F' || temp[y][x] == '1' || temp[y][x] == 'E')
 		return (count);
 	if (temp[y][x] == 'C')
 		count --;
@@ -37,8 +36,7 @@ int	flood_fill_exit(char **temp, int count, int y, int x)
 		return (count);
 	if (y < 0 || x < 0 || !temp[y] || temp[y][x] == '\0')
 		return (count);
-	if ((temp[y][x] == 'F' || temp[y][x] != 0) \
-	&& temp[y][x] != 'P'&& temp[y][x] != 'E')
+	if (temp[y][x] == 'F' || temp[y][x] == '1')
 		return (count);
 	if (temp[y][x] == 'E')
 		count --;

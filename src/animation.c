@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 13:56:09 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/04 14:12:21 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/11 12:41:35 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	render_map(t_game *game)
 	return ;
 }
 
-void	enemy_animation(t_game *game)
+void	enemy_ready(t_game *game)
 {
 	game->enemy_timer++;
 	if (game->enemy_timer >= 400)
@@ -96,9 +96,9 @@ int	animation_loop(t_game *game)
 		game->player_timer = 0;
 		game->player_index = (game->player_index + 1) % 4;
 	}
-	if (game->collectable_counter >= 200)
+	if (game->collectable_timer >= 200)
 	{
-		game->collectable_counter = 0;
+		game->collectable_timer = 0;
 		game->collectable_index = (game->collectable_index + 1) % 3;
 	}
 	if (game->exit_timer >= 300)
@@ -107,7 +107,7 @@ int	animation_loop(t_game *game)
 		game->exit_index = (game->exit_index + 1) % 2;
 	}
 	if (game->enemy_x != -1)
-		enemy_animation(game);
+		enemy_ready(game);
 	render_map(game);
 	return (0);
 }
