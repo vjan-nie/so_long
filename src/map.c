@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:04:50 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/06/10 16:29:09 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/06/17 12:55:04 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ char	**get_map(char **map, int fd) //Read and safe in array
 	{
 		clean_line = ft_strtrim(line, "\n");
 		free(line);
+		if (!clean_line)
+			clean_line = ft_strdup("");
 		if (!clean_line)
 		{
 			free_map(map);
