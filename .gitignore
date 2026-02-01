@@ -1,0 +1,33 @@
+# Compiled object files
+*.o
+*.a
+*.so
+
+# Executables
+so_long
+*.out
+*.exe
+
+# Build directories
+obj/
+build/
+
+# Dependency files
+*.d
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+*.log
